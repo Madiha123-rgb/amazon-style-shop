@@ -7,17 +7,21 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     
     // Basic validation
     if (email && password) {
-        // Store user info in localStorage
+        // Store user info in localStorage BEFORE redirecting
         localStorage.setItem('userEmail', email);
         localStorage.setItem('isLoggedIn', 'true');
+        
+        // Verify the data was saved
+        console.log('User logged in:', email);
+        console.log('isLoggedIn:', localStorage.getItem('isLoggedIn'));
         
         // Show success message
         showSuccess('Login successful! Redirecting...');
         
-        // Redirect to home page after 1 second
+        // Redirect to home page after 500ms
         setTimeout(() => {
             window.location.href = 'home.html';
-        }, 1000);
+        }, 500);
     } else {
         showError('Please fill in all fields');
     }
@@ -25,7 +29,8 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 
 // Check if user is logged in on page load
 window.addEventListener('load', function() {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
+    // Only redirect if already logged in AND on login page
+    if (localStorage.getItem('isLoggedIn') === 'true' && window.location.pathname.includes('index.html')) {
         window.location.href = 'home.html';
     }
 });
@@ -36,6 +41,7 @@ function showError(message) {
     if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.classList.add('show');
+        console.error('Error:', message);
     }
 }
 
@@ -45,5 +51,6 @@ function showSuccess(message) {
     if (successDiv) {
         successDiv.textContent = message;
         successDiv.classList.add('show');
+        console.log('Success:', message);
     }
 }
